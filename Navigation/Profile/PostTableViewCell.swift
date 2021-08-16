@@ -2,9 +2,6 @@
 //  PostTableViewCell.swift
 //  Navigation
 //
-//  Created by TIS Developer on 02.08.2021.
-//  Copyright © 2021 Artem Novichkov. All rights reserved.
-//
 
 import UIKit
 

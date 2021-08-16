@@ -2,9 +2,6 @@
 //  ProfileTableHederView.swift
 //  Navigation
 //
-//  Created by TIS Developer on 30.07.2021.
-//  Copyright © 2021 Artem Novichkov. All rights reserved.
-//
 
 import UIKit
 
@@ -143,13 +140,13 @@ private extension ProfileHederView{
                 
         let constraints = [
             fullNameLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 27),
-            fullNameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
+            fullNameLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 142),
             fullNameLabel.bottomAnchor.constraint(equalTo: statusLabel.topAnchor, constant: -16),
             
-            statusLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
+            statusLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 142),
             statusLabel.bottomAnchor.constraint(equalTo: statusTextField.topAnchor, constant: -16),
             
-            statusTextField.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
+            statusTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 142),
             statusTextField.heightAnchor.constraint(equalToConstant: 40),
             statusTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             

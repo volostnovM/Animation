@@ -2,9 +2,6 @@
 //  ProfileViewController.swift
 //  Navigation
 //
-//  Created by TIS Developer on 21.07.2021.
-//  Copyright © 2021 Artem Novichkov. All rights reserved.
-//
 
 import UIKit
 
@@ -12,6 +9,11 @@ class ProfileViewController: UIViewController {
     
     let header = ProfileHederView()
     lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAvatar))
+    lazy var  originalCenter = self.header.avatarImageView.center
+    lazy var  originalTransform = self.header.avatarImageView.transform
+    let closeButton = UIButton()
+    let hiddenView = UIView()
+    
     
     private var tempStorage: [Post] = [] {
         didSet {
@@ -69,30 +71,60 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func tapAvatar() {
-        print("tap avatar")
+        originalCenter = self.header.avatarImageView.center
+        originalTransform = self.header.avatarImageView.transform
         
-        NSLayoutConstraint.deactivate(self.header.avatarConstraints)
         
-        UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: [], animations: {
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) {
-                       
-                //self.header.avatarImageView.frame = CGRect(x: 0, y: self.view.bounds.height/2 - self.view.bounds.width/2, width: self.view.bounds.width, height: self.view.bounds.width)
-                
-                let avatarConstraints = [
-                    self.header.avatarImageView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-                    self.header.avatarImageView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-                    self.header.avatarImageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: self.view.bounds.width/2),
-                    self.header.avatarImageView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -self.view.bounds.width/2),
-                    self.header.avatarImageView.heightAnchor.constraint(equalToConstant: self.view.bounds.width),
-                    self.header.avatarImageView.widthAnchor.constraint(equalToConstant: self.view.bounds.width)
-                ]
-                
-                NSLayoutConstraint.activate(avatarConstraints)
-                
+        hiddenView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        hiddenView.backgroundColor = .darkGray
+        view.addSubview(hiddenView)
+
+        view.insertSubview(header.avatarImageView, aboveSubview: hiddenView)
+        //header.avatarImageView.superview?.bringSubviewToFront(header.avatarImageView)
+
+        
+        UIView.animateKeyframes(withDuration: 0.8, delay: 0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.63) {
+
+                self.header.avatarImageView.center = self.view.center
+                let scaleFactor = self.view.bounds.width / self.header.avatarImageView.bounds.width
+                self.header.avatarImageView.transform = self.header.avatarImageView.transform.scaledBy(x: scaleFactor, y: scaleFactor)
+                self.header.avatarImageView.layer.cornerRadius = 0
+                self.hiddenView.alpha = 0.5
             }
+            UIView.addKeyframe(withRelativeStartTime: 0.63, relativeDuration: 0.37) {
+                self.closeButton.frame = CGRect(x: self.view.frame.width - 30, y: 50, width: 30, height: 30)
+                self.closeButton.setTitleColor(UIColor.white, for: .normal)
+                self.closeButton.addTarget(self, action: #selector(self.tapCloseButton), for: .touchUpInside)
+                self.closeButton.setImage(UIImage(named: "close.png"), for: .normal)
+                self.view.addSubview(self.closeButton)
+            }
+            
         }, completion: { finished in
                 print(finished)
         })
+        
+    }
+    
+    @objc func tapCloseButton() {
+
+        self.view.willRemoveSubview(header.avatarImageView)
+        
+        UIView.animate(withDuration: 0.5) {
+
+        } completion: { _ in
+            UIView.animate(withDuration: 0.5) {
+                self.view.insertSubview(self.hiddenView, aboveSubview: self.header.avatarImageView)
+                self.header.avatarImageView.center = self.originalCenter
+                self.header.avatarImageView.transform = self.originalTransform
+             self.header.avatarImageView.layer.cornerRadius = self.header.avatarImageView.frame.size.width / 2
+                self.hiddenView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                self.view.willRemoveSubview(self.hiddenView)
+             
+                self.closeButton.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                self.view.willRemoveSubview(self.closeButton)
+            }
+        }
     }
 }
 

@@ -2,9 +2,6 @@
 //  PhotosViewController.swift
 //  Navigation
 //
-//  Created by TIS Developer on 06.08.2021.
-//  Copyright © 2021 Artem Novichkov. All rights reserved.
-//
 
 import UIKit
 
@@ -87,7 +84,7 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
         
         let width: CGFloat
         
-        width = (collectionView.frame.width - 8 * 4)/3 // 3 в ряд
+        width = (collectionView.frame.width - 8 * 4)/3
     
         return CGSize(width: width, height: width)
     }
